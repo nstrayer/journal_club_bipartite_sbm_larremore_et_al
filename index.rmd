@@ -29,10 +29,14 @@ options(htmltools.dir.version = FALSE)
 - Why are they trying to do it?
 - The "old" ways
 - The SBM
+  - Formula
 - Degree Correction
   - Why
   - How
 - The BiSBM
+  - About
+  - Formula
+  - Fitting it
 - Results
   - Simulated data
   - Real data
@@ -124,19 +128,34 @@ class: middle
 
 ---
 
+class: middle
+
+## SBM formulation
+
+
+![:centerPic 100](photos/sbm_formula.jpg)
+
+
+
+---
+
 # Degree Correction
 
 
-
----
-
-## Why
+![:space 1]
 
 
+### Why
 
----
+Looking just at the average number of connections between groups means the model will cluster popular nodes with each other. This means a node that is noisey but popular can mess stuff up.
 
-## How
+![:space 8]
+
+
+
+### How
+
+Introduce a new parameter $\theta_i$ which controls the expected degree of each node. Thus changing the $\lambda$ of the Poisson from $\omega_{i,j}$ to $\theta_i\theta_j\omega_{i,j}$.
 
 
 
@@ -144,6 +163,45 @@ class: middle
 
 # The BiSBM
 
+### How
+By not letting the SBM place nodes of the same type in a cluster together we force it to take a bipartite form. 
+
+
+### What changes
+$k$ groups $\to$ $k_a$ and $k_b$ groups.
+
+Full $\omega$ matrix $\to$ block matrix with upper right partition $B$: $(k_a \times k_b)$
+
+
+
+### What doesn't change
+
+This structure forcing amounts to an infinitely strong prior of group membership between clusters. So posterior is effectively the same.
+
+---
+
+## BiSBM formulation
+
+
+![:centerPic 120](photos/dcbisbm_formula.jpg)
+
+---
+
+## How it's fit
+
+![:space 3]
+
+
+1. Assign a random group to all nodes
+2. Take node $i$ and move it to another group of the same type and record posterior probability
+3. Repeat step 2 for every available group of the same type
+4. Repeat steps 2 and 3 for every node in the network
+5. Choose move that yielded the best posterior prob (this may be a decline) and change group assignments accordingly
+6. Repeat steps 2 through 5 until convergence
+
+![:space 8]
+
+> The algorithm should be run many times and the highest score from among these independent replicates selected.
 
 
 ---
@@ -167,3 +225,4 @@ class: middle
 ---
 
 # My thoughts
+
