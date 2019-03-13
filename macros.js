@@ -13,3 +13,8 @@ remark.macros.colorText = function(color) {
 remark.macros.space = function(percentage) {
   return `<div style="height: ${percentage}%"></div>`;
 };
+
+remark.macros.small = function(shrink_amnt){
+  const text = this;
+  return `<span style="font-size: ${shrink_amnt}em;"> ${text} </span>`;
+};
