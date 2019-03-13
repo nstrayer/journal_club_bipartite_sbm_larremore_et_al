@@ -4,7 +4,7 @@
     <title>Efficiently inferring community structure in bipartite networks</title>
     <meta charset="utf-8" />
     <meta name="author" content="Presented by: Nick Strayer" />
-    <meta name="date" content="2019-03-12" />
+    <meta name="date" content="2019-03-13" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
   </head>
@@ -15,7 +15,7 @@ class: center, middle, inverse, title-slide
 # Efficiently inferring community structure in bipartite networks
 ## Daniel B. Larremore, Aaron Clauset, and Abigail Z. Jacobs
 ### Presented by: Nick Strayer
-### 2019-03-12
+### 2019-03-13
 
 ---
 
@@ -36,8 +36,6 @@ class: center, middle, inverse, title-slide
 - The SBM
   - Formula
 - Degree Correction
-  - Why
-  - How
 - The BiSBM
   - About
   - Formula
@@ -154,7 +152,7 @@ class: middle
 
 Looking just at the average number of connections between groups means the model will cluster popular nodes with each other. This means a node that is noisey but popular can mess stuff up.
 
-![:space 8]
+![:space 6]
 
 
 
@@ -213,23 +211,130 @@ This structure forcing amounts to an infinitely strong prior of group membership
 
 # Results
 
+### What
+They tested the model on simulated data and on real world well characterized networks 
+
+
+### How
+Comparisons are made between the BiSBM and the plain SBM running on unipartite projections.
+
+
+### Why
+Due to how existing bipartite methods work they couldn't directly compare them, hence the projections. 
 
 
 ---
 
-## Simulated data
+## How they measured performance for simulated data
+
+![:space 3]
 
 
+- Used mutual information between truth and model results to measure 'degree to which knowledge of one partition let's us predict the other partition'.
+
+![:space 3]
+
+- To get rid of influence of the size of the group they used a normalized version of mutual information.
+  - `\(I_{\text{norm}}(X,Y) = 1, \text{iff } X = Y\)`
+  - `\(I_{\text{norm}}(X,Y) = 0\)` when `\(X\)` and `\(Y\)` are completely uncorrelated.
+
+![:space 3]
+
+
+- Compared bipartite cluster choice of one type to unipartite projection on that type.
+---
+
+class: middle
+
+![:centerPic 100](photos/mutual_info.jpg)
+
+---
+
+## Easy simulation
+
+- Non-overlapping structure with same number of clusters for both types
+- Uniform degree distribution among nodes
+
+![:space 5]
+
+![:centerPic 70](photos/simple_sim.jpg)
+
+---
+
+## Hard simulation
+
+- Overlapping structure with differing number of clusters for both types
+- Wide degree distribution among nodes
+
+![:space 5]
+![:centerPic 70](photos/hard_sim.jpg)
 
 ---
 
 ## Real data
 
+![:space 20]
+- No 'truth' to compare to so well characterized networks are used
+- Used three networks that differed in size greatly
+- Results 'make sense'
+
+---
+
+## Southern Womens Cohort
+
+- __18__ women attended __14__ events
+- The `hello_world` of bipartite networks
+- Exactly matched the expert-derived partitions
+
+![:space 7]
+
+  
+![:centerPic 60](photos/swc_plot.png)
+
+  
+---
+
+
+## Malaria genes
+
+- __297__ genes and __806__ genetic substrings
+- Wide degree distributions
+- Clusters seemed biologically meaningful when DC was used
+  
+![:space 7]
+
+  
+![:centerPic 90](photos/malaria_plot.png)
+
+---
+
+
+
+## IMDB
+  
+- __53,158__ actors and __39,786__ movies
+- Partitions correlated almost directly with language and genre
+
+![:space 7]
+
+![:centerPic 60](photos/imdb_plot.png)
 
 
 ---
 
 # My thoughts
+
+![:space 3]
+- Lots of the limitations in this work have been fixed
+  - The ability to let the model choose number of partitions 
+  - Sampling inefficiency
+  - Hierarchichal structure
+  
+- The difficulty with networks (and all unsupervized learning really) is determining how well they work in the real world
+
+- Thinking about high dimensional data like this gets around a lot of problems we have in classic statistics methods
+  - Curse of dimensionality
+  - Intepretability...
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
